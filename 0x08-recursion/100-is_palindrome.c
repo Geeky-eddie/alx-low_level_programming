@@ -7,8 +7,6 @@ int _strlen(char *s);
 /**
  * is_palindrome - Checks if a string is a palindrome.
  * @s: The string to be checked.
- * @start: The starting index of the current comparison.
- * @end: The ending index of the current comparison.
  *
  * Return: 1 if the string is a palindrome, 0 otherwise.
  */
