@@ -1,54 +1,28 @@
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include "main.h"
+#include <stdlib.h>
+
 /**
- * read_textfile - Reads and prints a text file to the standard output.
- * @filename: The name of the file to read.
- * @letters: The number of letters to read and print.
- *
- * Return: The actual number of letters read and printed.
+ * read_textfile- Read text file print to STDOUT.
+ * @filename: text file being read
+ * @letters: number of letters to be read
+ * Return: w- actual number of bytes read and printed
+ *        0 when function fails or filename is NULL.
  */
 ssize_t read_textfile(const char *filename, size_t letters)
 {
-FILE *file;
-char buffer[1024];
-ssize_t total_read = 0;
-ssize_t bytes_read;
-ssize_t bytes_to_print;
-ssize_t bytes_written;
+	char *boo;
+	ssize_t fop;
+	ssize_t wr;
+	ssize_t tr;
 
-if (filename == NULL)
-{
-return (0);
-}
+	fop = open(filename, O_RDONLY);
+	if (fop == -1)
+		return (0);
+	boo = malloc(sizeof(char) * letters);
+	tr = read(fop, boo, letters);
+	wr = write(STDOUT_FILENO, boo, tr);
 
-file = fopen(filename, "r");
-if (file == NULL)
-{
-return (0);
-}
-
-while (letters > 0)
-{
-bytes_read = fread(buffer, 1, sizeof(buffer), file);
-if (bytes_read == 0)
-{
-break;
-}
-bytes_to_print = (bytes_read > (ssize_t) letters) ? (ssize_t)
-letters : bytes_read;
-
-bytes_written = write(STDOUT_FILENO, buffer, bytes_to_print);
-
-if (bytes_written != bytes_to_print)
-{
-fclose(file);
-return (0);
-}
-total_read += bytes_to_print;
-letters -= (size_t) bytes_to_print;
-}
-fclose(file);
-return (total_read);
+	free(boo);
+	close(fop);
+	return (wr);
 }
